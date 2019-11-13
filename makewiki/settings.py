@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'wiki'
+    'wiki',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -107,8 +107,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-DEFAULT_LOGOUT_URL = '/'
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -136,6 +134,7 @@ WIKI_PAGE_TITLE_MAX_LENGTH = 600
 # Where to redirect during authentication
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+DEFAULT_LOGOUT_URL = '/'
 
 # Required for Heroku
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
