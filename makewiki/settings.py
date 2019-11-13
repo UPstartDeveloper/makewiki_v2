@@ -107,6 +107,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+DEFAULT_LOGOUT_URL = '/'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
