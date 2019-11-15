@@ -26,13 +26,13 @@ class PageDetailView(DetailView):
     def get(self, request, slug):
         """ Returns a specific wiki page by slug. """
         page = self.get_queryset().get(slug__iexact=slug)
-        return render(request, 'add_page.html', {
+        return render(request, 'page.html', {
           'page': page
         })
 
 
 def get_page(request):
-    if request.method == 'POST':
+    if request.method == 'POST' or None:
         form = PageForm()
         if form.is_valid():
             form = PageForm(request.POST or None)
