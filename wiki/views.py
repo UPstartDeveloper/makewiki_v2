@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormView
 from wiki.models import Page
 from wiki.forms import PageForm
 from django.http import HttpResponseRedirect
@@ -31,8 +32,22 @@ class PageDetailView(DetailView):
         })
 
 
+class CreatePageForm(FormView):
+    """Renders a form for user to create a new form."""
+    template_name = 'add_page.html'
+    form = PageForm
+    success_url = 'create'
+
+    def get(self, request):
+        """Renders the form on a HTTP GET request."""
+        form = PageForm()
+        context = {
+            'form': form,
+        }
+        return render(request, self.template_name, context)
+'''
 def get_page(request):
-    if request.method == 'POST' or None:
+    if request.method == 'POST':
         form = PageForm()
         if form.is_valid():
             form = PageForm(request.POST or None)
@@ -44,3 +59,4 @@ def get_page(request):
     else:
         form = PageForm()
         return render(request, 'add_page.html', {'form': form})
+'''
