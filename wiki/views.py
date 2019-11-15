@@ -4,6 +4,7 @@ from django.views.generic.detail import DetailView
 from wiki.models import Page
 from wiki.forms import PageForm
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 class PageListView(ListView):
@@ -38,7 +39,8 @@ def get_page(request):
             new_page = form.save(commit=False)
             new_page.author = user.username
             new_page.save()
-            return HttpResponseRedirect()
+            return HttpResponseRedirect(reverse('wiki-details-view',
+                                                args=(new_page.slug,)))
     else:
         form = PageForm()
         return render(request, 'add_page.html', {'form': form})
