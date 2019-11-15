@@ -41,4 +41,4 @@ def get_page(request):
             return HttpResponseRedirect()
     else:
         form = PageForm()
-        return render(request, 'wiki/page.html', {'form': form})
+        return render(request, 'wiki/add_page.html', {'form': form})
