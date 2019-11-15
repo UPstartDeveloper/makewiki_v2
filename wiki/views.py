@@ -3,6 +3,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from wiki.models import Page
 from wiki.forms import PageForm
+from django.http import HttpResponseRedirect
 
 
 class PageListView(ListView):
@@ -16,6 +17,7 @@ class PageListView(ListView):
           'pages': pages
         })
 
+
 class PageDetailView(DetailView):
     """ Renders a specific page based on it's slug."""
     model = Page
@@ -26,3 +28,13 @@ class PageDetailView(DetailView):
         return render(request, 'page.html', {
           'page': page
         })
+
+
+def get_page(request):
+    if request.method == 'POST':
+        form = PageForm()
+        if form.is_valid():
+            form = PageForm(request.POST)
+            new_page = form.save(commit=False)
+            new_page.author = user.username
+            new_page.save()
