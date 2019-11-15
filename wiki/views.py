@@ -38,3 +38,7 @@ def get_page(request):
             new_page = form.save(commit=False)
             new_page.author = user.username
             new_page.save()
+            return HttpResponseRedirect()
+    else:
+        form = PageForm()
+        return render(request, 'wiki/page.html', {'form': form})
