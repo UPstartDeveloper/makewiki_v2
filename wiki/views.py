@@ -25,7 +25,7 @@ class PageDetailView(DetailView):
     def get(self, request, slug):
         """ Returns a specific wiki page by slug. """
         page = self.get_queryset().get(slug__iexact=slug)
-        return render(request, 'wiki/add_page.html', {
+        return render(request, 'add_page.html', {
           'page': page
         })
 
@@ -41,4 +41,4 @@ def get_page(request):
             return HttpResponseRedirect()
     else:
         form = PageForm()
-        return render(request, 'wiki/add_page.html', {'form': form})
+        return render(request, 'add_page.html', {'form': form})
