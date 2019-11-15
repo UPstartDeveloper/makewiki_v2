@@ -25,7 +25,7 @@ class PageDetailView(DetailView):
     def get(self, request, slug):
         """ Returns a specific wiki page by slug. """
         page = self.get_queryset().get(slug__iexact=slug)
-        return render(request, 'page.html', {
+        return render(request, 'wiki/add_page.html', {
           'page': page
         })
 
@@ -34,7 +34,7 @@ def get_page(request):
     if request.method == 'POST':
         form = PageForm()
         if form.is_valid():
-            form = PageForm(request.POST)
+            form = PageForm(request.POST or None)
             new_page = form.save(commit=False)
             new_page.author = user.username
             new_page.save()
