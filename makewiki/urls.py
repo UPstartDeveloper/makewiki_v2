@@ -29,5 +29,5 @@ urlpatterns = [
     path('registration/', include('accounts.urls')),
     # Inspiration for these URL patterns goes to Corey Schafer's video tutorial: https://youtu.be/-tyBEsHSv7w
     path('reset-password/', auth_views.PasswordResetView.as_view(template_name="accounts/password_reset.html"), name="password_reset"),
-    path('reset-password/done', auth_views.PasswordResetDoneView.as_view(template_name="accounts/password_reset_done.html"), name="password_reset_done")
+    path('reset-password/done/', auth_views.PasswordResetDoneView.as_view(template_name="accounts/password_reset_done.html"), name="password_reset_done")
 ]
