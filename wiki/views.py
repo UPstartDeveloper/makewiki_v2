@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import FormView, CreateView
+from django.views.generic.edit import FormView, CreateView, ModelFormMixin
 from wiki.models import Page
 from wiki.forms import PageForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
+from django.contrib.auth.models import User
 
 
 class PageListView(ListView):
@@ -32,53 +33,29 @@ class PageDetailView(DetailView):
         })
 
 
-# credit to Ben Lafferty for explaining the CreateView to me
 class PageCreate(CreateView):
     """Render a form to create a new page."""
     model = Page
-    fields = ["title", "author", "content"]
+    fields = ["title", "content"]
     template_name = "add_page.html"
+    object = None  # new Page to be created
 
-
-'''
-class CreatePageForm(FormView):
-    """Renders a form for user to create a new form."""
-    template_name = 'add_page.html'
-    form = PageForm()
-    success_url = 'create'
-
-    def get(self, request):
-        """Renders the form on a HTTP GET request."""
-        form = PageForm()
-        context = {
-            'form': form,
-        }
-        return render(request, self.template_name, context)
-
-    def post(self, request):
-        """Make a new page from form data,
-           and redirect user to the details of that page afterwards.
+    def form_valid(self, form, request):
+        """Creates the new Page, and makes the user who submitted
+           the form the author.
         """
-        if self.form.is_valid():
-            form = PageForm(request.POST)
-            new_page = form.save(commit=False)
-            new_page.author = user.username
-            new_page = form.save()
-            return HttpResponseRedirect('wiki-list-page')
-'''
+        self.object = form.save(commit=False)
+        user = User.objects.get(username=request.user)
+        self.object.author = user
+        self.object = form.save()
+        return super(ModelFormMixin, self).form_valid(form)
 
-'''
-def get_page(request):
-    if request.method == 'POST':
-        form = PageForm()
+    def post(self, request, *args, **kwargs):
+        """Override the CreateView post method, so that it invokes
+           the subclass form_valid, which includes a parameter for request.
+        """
+        form = self.get_form()
         if form.is_valid():
-            form = PageForm(request.POST or None)
-            new_page = form.save(commit=False)
-            new_page.author = user.username
-            new_page.save()
-            return HttpResponseRedirect(reverse('wiki-details-view',
-                                                args=(new_page.slug,)))
-    else:
-        form = PageForm()
-        return render(request, 'add_page.html', {'form': form})
-'''
+            return self.form_valid(form, request)
+        else:
+            return self.form_invalid(form, request)
