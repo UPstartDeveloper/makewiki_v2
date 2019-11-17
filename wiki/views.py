@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, CreateView
 from wiki.models import Page
 from wiki.forms import PageForm
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 
 class PageListView(ListView):
@@ -32,10 +32,19 @@ class PageDetailView(DetailView):
         })
 
 
+# credit to Ben Lafferty for explaining the CreateView to me
+class PageCreate(CreateView):
+    """Render a form to create a new page."""
+    model = Page
+    fields = ["title", "author", "content"]
+    template_name = "add_page.html"
+
+
+'''
 class CreatePageForm(FormView):
     """Renders a form for user to create a new form."""
     template_name = 'add_page.html'
-    form = PageForm
+    form = PageForm()
     success_url = 'create'
 
     def get(self, request):
@@ -45,6 +54,19 @@ class CreatePageForm(FormView):
             'form': form,
         }
         return render(request, self.template_name, context)
+
+    def post(self, request):
+        """Make a new page from form data,
+           and redirect user to the details of that page afterwards.
+        """
+        if self.form.is_valid():
+            form = PageForm(request.POST)
+            new_page = form.save(commit=False)
+            new_page.author = user.username
+            new_page = form.save()
+            return HttpResponseRedirect('wiki-list-page')
+'''
+
 '''
 def get_page(request):
     if request.method == 'POST':
