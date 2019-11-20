@@ -10,7 +10,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-      <a class="navbar-brand" href="{% url 'wiki-list-page' %}"><i class="fas fa-fw fa-book"></i> makewiki</a>
+      <a class="navbar-brand" href="{% url 'wiki:wiki-list-page' %}"><i class="fas fa-fw fa-book"></i> makewiki</a>
       <form class="form-inline ml-auto">
         {% if not user.is_authenticated %}
             <a href="{% url 'login' %}" class="btn btn-secondary ml-2">Log In</a>
@@ -19,7 +19,7 @@
         {% if user.is_authenticated %}
             <div class="text-white">Hello, <strong>{{ user.username }}</strong>!</div>
             <a href="{% url 'logout' %}" class="btn btn-danger ml-2">Log Out</a>
-            <a href="{% url 'create_page_form' %}" class="btn btn-success ml-2">New Page</a>
+            <a href="{% url 'wiki:create_page_form' %}" class="btn btn-success ml-2">New Page</a>
         {% endif %}
 
       </form>
