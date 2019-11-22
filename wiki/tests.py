@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.test import TestCase
 from django.contrib.auth.models import User
 from wiki.models import Page
+# from io import StringIO
+# from django.core.management import call_command
 
 
 # Create your tests here.
@@ -32,7 +34,8 @@ class PageListViewTests(TestCase):
         user = User.objects.create()
 
         Page.objects.create(title="My Test Page", content="test", author=user)
-        Page.objects.create(title="Another Test Page", content="test", author=user)
+        Page.objects.create(title="Another Test Page", content="test",
+                            author=user)
 
         # Issue a GET request to the MakeWiki homepage.
         # When we make a request, we get a response back.
@@ -51,3 +54,26 @@ class PageListViewTests(TestCase):
             ['<Page: My Test Page>', '<Page: Another Test Page>'],
             ordered=False
         )
+
+
+class PageDetailViewTests(TestCase):
+    def test_detail_view_for_one_page(self):
+        '''The detail view for a specific page loads with the Page's data.'''
+        # data to simulate user experience of making a new Page
+        user = User.objects.create()
+        Page.objects.create(title="My Test Page", content="test", author=user)
+
+        # issues GET request to the testing database
+        response = self.client.get('/my-test-page')
+
+        # test that the number of pages in the template is only one
+        response_num = response.context['page']
+        self.assertEqual(type(response_num), Page)
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, 'My Test Page')
+
+
+class PageCreateTests(TestCase):
+    pass
