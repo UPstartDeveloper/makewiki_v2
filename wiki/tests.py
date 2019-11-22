@@ -2,8 +2,8 @@ from django.test import TestCase
 from django.test import TestCase
 from django.contrib.auth.models import User
 from wiki.models import Page
-# from io import StringIO
-# from django.core.management import call_command
+from django.utils import timezone
+from django.urls import reverse
 
 
 # Create your tests here.
@@ -76,4 +76,19 @@ class PageDetailViewTests(TestCase):
 
 
 class PageCreateTests(TestCase):
-    pass
+    def test_create_one_page_and_redirect(self):
+        user = User.objects.create()
+        now = timezone.now()
+        form_data = {
+            'title': 'My Test Page',
+            'author': user,
+            'slug': 'my-test-page',
+            'content': 'This is a test page.',
+            'created': now,
+            'modified': now
+        }
+        response = self.client.post('/create/', form_data)
+        assertEqual(Page.objects.last().title, 'My Test Page')
+
+        response = self.client.get('/my-test-page')
+        assertEqual(response.status_code, 302)
