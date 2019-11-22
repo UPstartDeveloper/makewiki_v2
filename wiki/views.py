@@ -52,7 +52,6 @@ class PageCreate(CreateView):
         user = User.objects.get(username=request.user)
         self.object.author = user
         self.object = form.save()
-        print(form.cleaned_data)
         return super(ModelFormMixin, self).form_valid(form)
 
     def post(self, request, *args, **kwargs):

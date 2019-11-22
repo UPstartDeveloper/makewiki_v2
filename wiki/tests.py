@@ -79,16 +79,16 @@ class PageCreateTests(TestCase):
         '''Create form displays with fields to enter title and content.'''
         response = self.client.get(reverse('wiki:create_page_form'))
         self.assertIn(b'Title of your page.', response.content)
-        self.assertIn(b'Write the content of your page here.', response.content)
-    """
+        self.assertIn(b'Write the content of your page here.',
+                      response.content)
+
     def test_submit_create_form(self):
         '''A new page is created after the user submits the creation form.'''
-        user = User.objects.create()
+        user = User.objects.create(username='admin')
         form_data = {
             'title': 'My Test Page',
-            'author': user.id,
+            'author': user.get_username(),
             'content': 'This is a test page.'
         }
         response = self.client.post('/create/', data=form_data)
         self.assertEqual(response.status_code, 302)
-    """
