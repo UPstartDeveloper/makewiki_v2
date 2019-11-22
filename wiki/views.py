@@ -40,16 +40,21 @@ class PageDetailView(DetailView):
 class PageCreate(CreateView):
     '''Render a form to create a new page.'''
     model = Page
-    fields = ["title", "content"]
+    fields = ["title", 'author', "content"]
     object = None  # new Page to be created
     template_name = 'wiki/add_page.html'
-
+    '''
+    # these methods allow the author of the page to be the user who's signed in
+    # I implemented these to improve security, but I am commenting them out for
+    # because I have not yet been able to figure out how to test this
+    # appropiately
+        pass
     def form_valid(self, form, request):
         """Creates the new Page, and makes the user who submitted
            the form the author.
         """
         self.object = form.save(commit=False)
-        user = User.objects.get(username=request.user)
+        user = User.objects.get(id=request.user.id)
         self.object.author = user
         self.object = form.save()
         return super(ModelFormMixin, self).form_valid(form)
@@ -60,9 +65,15 @@ class PageCreate(CreateView):
         """
         form = self.get_form()
         if form.is_valid():
+            print('The form is valid')
+            print(f'This is the form data: {form.cleaned_data}')
+            print(f'This is what the request looks like: {request}')
+            print(f'This is the user: {request.user}')
             return self.form_valid(form, request)
         else:
+            print('The form is invalid')
             return self.form_invalid(form)
+    '''
 
 
 class PageUpdate(UpdateView):

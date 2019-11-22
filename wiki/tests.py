@@ -1,8 +1,10 @@
 from django.test import TestCase
+# from rest_framework.test import APIRequestFactory
 from django.contrib.auth.models import User
 from wiki.models import Page
 from django.utils import timezone
 from django.urls import reverse
+from wiki.views import PageCreate
 
 
 # Create your tests here.
@@ -84,13 +86,34 @@ class PageCreateTests(TestCase):
 
     def test_submit_create_form(self):
         '''A new page is created after the user submits the creation form.'''
-        user = User.objects.create_user(username='user')
-        user.set_password('some_password')
-        user.save()
+        user = User.objects.create()
         self.client.login()
         form_data = {
             'title': 'My Test Page',
+            'author': user.id,
             'content': 'This is a test page.'
         }
-        response = self.client.post('/create/', args=form_data, kwargs=user)
+        # ATTEMPT using factory request
+        # make a post request to the PageCreate view using the user
+        # factory = APIRequestFactory()
+        # user = User.objects.get(username='zainraza')
+        # view = PageCreate.as_view()
+        # request = factory.get('/create/')
+        # force_authenticate(request, user=user)
+        # response = self.client.post('/create/', args=form_data, kwargs=user)
+        response = self.client.post('/create/', data=form_data, user=user)
+        # test that the route ends in a redirect
         self.assertEqual(response.status_code, 302)
+        # test that the database contains the new Page
+        page = Page.objects.last()
+        self.assertEqual(page.title, 'My Test Page')
+
+        '''
+        # test that the new Page has the right data
+        new_page = Page.objects.get(title=form_data['title'])
+
+        self.assertEqual(new_page.title, "My Test Page")
+        self.assertEqual(new_page.content, 'This is a test page.')
+
+        # test that the new page shows the submitted properly
+        '''
