@@ -84,14 +84,13 @@ class PageCreateTests(TestCase):
 
     def test_submit_create_form(self):
         '''A new page is created after the user submits the creation form.'''
-        user = User.objects.create_user('user')
+        user = User.objects.create_user(username='user')
         user.set_password('some_password')
         user.save()
         self.client.login()
         form_data = {
             'title': 'My Test Page',
-            'author': user,
             'content': 'This is a test page.'
         }
-        response = self.client.post('/create/', data=form_data)
+        response = self.client.post('/create/', args=form_data, kwargs=user)
         self.assertEqual(response.status_code, 302)
