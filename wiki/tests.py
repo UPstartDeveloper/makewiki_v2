@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.test import TestCase
 from django.contrib.auth.models import User
 from wiki.models import Page
 from django.utils import timezone
@@ -76,19 +75,20 @@ class PageDetailViewTests(TestCase):
 
 
 class PageCreateTests(TestCase):
-    def test_create_one_page_and_redirect(self):
+    def test_getting_creation_form(self):
+        '''Create form displays with fields to enter title and content.'''
+        response = self.client.get(reverse('wiki:create_page_form'))
+        self.assertIn(b'Title of your page.', response.content)
+        self.assertIn(b'Write the content of your page here.', response.content)
+    """
+    def test_submit_create_form(self):
+        '''A new page is created after the user submits the creation form.'''
         user = User.objects.create()
-        now = timezone.now()
         form_data = {
             'title': 'My Test Page',
-            'author': user,
-            'slug': 'my-test-page',
-            'content': 'This is a test page.',
-            'created': now,
-            'modified': now
+            'author': user.id,
+            'content': 'This is a test page.'
         }
-        response = self.client.post('/create/', form_data)
-        assertEqual(Page.objects.last().title, 'My Test Page')
-
-        response = self.client.get('/my-test-page')
-        assertEqual(response.status_code, 302)
+        response = self.client.post('/create/', data=form_data)
+        self.assertEqual(response.status_code, 302)
+    """
