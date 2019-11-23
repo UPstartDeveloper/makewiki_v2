@@ -42,11 +42,12 @@ class PageCreate(CreateView, LoginRequiredMixin):
     '''Render a form to create a new page.'''
     model = Page
     fields = ["title", "content"]
-    object = None  # new Page to be created
+    # object = None  # new Page to be created
     template_name = 'wiki/add_page.html'
 
     def form_valid(self, form):
-        '''Initializes author of new Note by tracking the logged in user.'''
+        '''Initializes author of new Page by tracking the logged in user.'''
+        assert self.request.user.is_authenticated is True
         form.instance.author = self.request.user
         return super().form_valid(form)
     '''

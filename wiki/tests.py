@@ -1,6 +1,7 @@
 from django.test import TestCase
 # from rest_framework.test import APIRequestFactory
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from wiki.models import Page
 from django.utils import timezone
 from django.urls import reverse
@@ -86,11 +87,13 @@ class PageCreateTests(TestCase):
 
     def test_submit_create_form(self):
         '''A new page is created after the user submits the creation form.'''
-        user = User.objects.create()
+        user = User.objects.create(username='Abdullah', password="Abdullah's passwd")
+        # assert user.is_authenticated is True
         self.client.login()
+        # user = authenticate(username='Abdullah', password="Abdullah's passwd")
         form_data = {
             'title': 'My Test Page',
-            'author': user.id,
+            # 'author': User.objects.create(),
             'content': 'This is a test page.'
         }
         # ATTEMPT using factory request
@@ -101,8 +104,9 @@ class PageCreateTests(TestCase):
         # request = factory.get('/create/')
         # force_authenticate(request, user=user)
         # response = self.client.post('/create/', args=form_data, kwargs=user)
-        response = self.client.post('/create/', data=form_data, user=user)
+        # test that the form submits with valid inputs
         # test that the route ends in a redirect
+        response = self.client.post('/create/', data=form_data, user=user)
         self.assertEqual(response.status_code, 302)
         # test that the database contains the new Page
         page = Page.objects.last()
