@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import User
 from django.template import loader
+from django.contrib.auth import authenticate, login
 
 
 class PageListView(ListView):
@@ -47,7 +48,6 @@ class PageCreate(CreateView, LoginRequiredMixin):
 
     def form_valid(self, form):
         '''Initializes author of new Page by tracking the logged in user.'''
-        assert self.request.user.is_authenticated is True
         form.instance.author = self.request.user
         return super().form_valid(form)
     '''
