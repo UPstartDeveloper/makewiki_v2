@@ -3,6 +3,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import (FormView, CreateView, ModelFormMixin,
                                        UpdateView)
+from django.contrib.auth.mixins import LoginRequiredMixin
 from wiki.models import Page
 from wiki.forms import PageForm
 from django.http import HttpResponseRedirect
@@ -37,12 +38,17 @@ class PageDetailView(DetailView):
         })
 
 
-class PageCreate(CreateView):
+class PageCreate(CreateView, LoginRequiredMixin):
     '''Render a form to create a new page.'''
     model = Page
-    fields = ["title", 'author', "content"]
+    fields = ["title", "content"]
     object = None  # new Page to be created
     template_name = 'wiki/add_page.html'
+
+    def form_valid(self, form):
+        '''Initializes author of new Note by tracking the logged in user.'''
+        form.instance.author = self.request.user
+        return super().form_valid(form)
     '''
     # these methods allow the author of the page to be the user who's signed in
     # I implemented these to improve security, but I am commenting them out for
