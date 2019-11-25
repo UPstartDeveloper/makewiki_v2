@@ -87,10 +87,12 @@ class PageCreateTests(TestCase):
 
     def test_submit_create_form(self):
         '''A new page is created after the user submits the creation form.'''
-        user = User.objects.create(username='Abdullah', password="Abdullah's passwd")
+        user = User.objects.create(username='Abdullah',
+                                   password="Abdullah's passwd")
         # assert user.is_authenticated is True
         self.client.login()
-        # user = authenticate(username='Abdullah', password="Abdullah's passwd")
+        # user = authenticate(username='Abdullah',
+        #  password="Abdullah's passwd")
         form_data = {
             'title': 'My Test Page',
             'author': user.id,
