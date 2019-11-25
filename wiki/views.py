@@ -39,16 +39,16 @@ class PageDetailView(DetailView):
         })
 
 
-class PageCreate(CreateView, LoginRequiredMixin):
+class PageCreate(CreateView):
     '''Render a form to create a new page.'''
     model = Page
-    fields = ["title", "content"]
+    fields = ["title", "author", "content"]
     # object = None  # new Page to be created
     template_name = 'wiki/add_page.html'
 
     def form_valid(self, form):
         '''Initializes author of new Page by tracking the logged in user.'''
-        form.instance.author = self.request.user
+        # form.instance.author = self.request.user
         return super().form_valid(form)
     '''
     # these methods allow the author of the page to be the user who's signed in

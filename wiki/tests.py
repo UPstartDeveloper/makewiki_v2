@@ -93,7 +93,7 @@ class PageCreateTests(TestCase):
         # user = authenticate(username='Abdullah', password="Abdullah's passwd")
         form_data = {
             'title': 'My Test Page',
-            # 'author': User.objects.create(),
+            'author': user.id,
             'content': 'This is a test page.'
         }
         # ATTEMPT using factory request
