@@ -1,7 +1,8 @@
 from django.test import TestCase
+from django.test.client import RequestFactory
 # from rest_framework.test import APIRequestFactory
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+# from django.contrib.auth import authenticate, get_user_model
 from wiki.models import Page
 from django.utils import timezone
 from django.urls import reverse
@@ -78,6 +79,13 @@ class PageDetailViewTests(TestCase):
 
 
 class PageCreateTests(TestCase):
+    def setUp(self):
+        '''Setup a mock user to make requests for these tests.'''
+        self.factory = RequestFactory()
+        self.user = User.objects.create(username='Abdullah',
+                                        email='abd@gmail.com',
+                                        password="Abdullah's passwd")
+
     def test_getting_creation_form(self):
         '''Create form displays with fields to enter title and content.'''
         response = self.client.get(reverse('wiki:create_page_form'))
@@ -87,39 +95,17 @@ class PageCreateTests(TestCase):
 
     def test_submit_create_form(self):
         '''A new page is created after the user submits the creation form.'''
-        user = User.objects.create(username='Abdullah',
-                                   password="Abdullah's passwd")
-        # assert user.is_authenticated is True
-        self.client.login()
-        # user = authenticate(username='Abdullah',
-        #  password="Abdullah's passwd")
+
         form_data = {
             'title': 'My Test Page',
-            'author': user.id,
             'content': 'This is a test page.'
         }
-        # ATTEMPT using factory request
-        # make a post request to the PageCreate view using the user
-        # factory = APIRequestFactory()
-        # user = User.objects.get(username='zainraza')
-        # view = PageCreate.as_view()
-        # request = factory.get('/create/')
-        # force_authenticate(request, user=user)
-        # response = self.client.post('/create/', args=form_data, kwargs=user)
-        # test that the form submits with valid inputs
-        # test that the route ends in a redirect
-        response = self.client.post('/create/', data=form_data, user=user)
+
+        post_request = self.factory.post('wiki:create_page_form', form_data)
+        post_request.user = self.user
+        response = PageCreate.as_view()(post_request)
+        # test the view ends in a redirect to the details page
         self.assertEqual(response.status_code, 302)
         # test that the database contains the new Page
         page = Page.objects.last()
         self.assertEqual(page.title, 'My Test Page')
-
-        '''
-        # test that the new Page has the right data
-        new_page = Page.objects.get(title=form_data['title'])
-
-        self.assertEqual(new_page.title, "My Test Page")
-        self.assertEqual(new_page.content, 'This is a test page.')
-
-        # test that the new page shows the submitted properly
-        '''
