@@ -50,37 +50,6 @@ class PageCreate(CreateView):
         '''Initializes author of new Page by tracking the logged in user.'''
         form.instance.author = self.request.user
         return super().form_valid(form)
-    '''
-    # these methods allow the author of the page to be the user who's signed in
-    # I implemented these to improve security, but I am commenting them out for
-    # because I have not yet been able to figure out how to test this
-    # appropiately
-        pass
-    def form_valid(self, form, request):
-        """Creates the new Page, and makes the user who submitted
-           the form the author.
-        """
-        self.object = form.save(commit=False)
-        user = User.objects.get(id=request.user.id)
-        self.object.author = user
-        self.object = form.save()
-        return super(ModelFormMixin, self).form_valid(form)
-
-    def post(self, request, *args, **kwargs):
-        """Override the CreateView post method, so that it invokes
-           the subclass form_valid, which includes a parameter for request.
-        """
-        form = self.get_form()
-        if form.is_valid():
-            print('The form is valid')
-            print(f'This is the form data: {form.cleaned_data}')
-            print(f'This is what the request looks like: {request}')
-            print(f'This is the user: {request.user}')
-            return self.form_valid(form, request)
-        else:
-            print('The form is invalid')
-            return self.form_invalid(form)
-    '''
 
 
 class PageUpdate(UpdateView):
