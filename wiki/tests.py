@@ -1,8 +1,6 @@
 from django.test import TestCase
 from django.test.client import RequestFactory
-# from rest_framework.test import APIRequestFactory
 from django.contrib.auth.models import User
-# from django.contrib.auth import authenticate, get_user_model
 from wiki.models import Page
 from django.utils import timezone
 from django.urls import reverse
@@ -80,7 +78,10 @@ class PageDetailViewTests(TestCase):
 
 class PageCreateTests(TestCase):
     def setUp(self):
-        '''Setup a mock user to make requests for these tests.'''
+        """Instantiate RequestFactory and User objects to pass POST requests
+           to the PageCreate view.
+
+        """
         self.factory = RequestFactory()
         self.user = User.objects.create(username='Abdullah',
                                         email='abd@gmail.com',
