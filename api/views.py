@@ -1,4 +1,5 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView
+from rest_framework.generics import (
+    ListCreateAPIView, RetrieveUpdateDestroyAPIView)
 
 from wiki.models import Page
 from api.serializers import PageSerializer
@@ -12,9 +13,9 @@ class PageList(ListCreateAPIView):
     serializer_class = PageSerializer
 
 
-class PageDetail(RetrieveDestroyAPIView):
-    """Presents a specific Page in more detail.
-       Allows for deletions of a Page.
+class PageOperationsView(RetrieveUpdateDestroyAPIView):
+    """Allows for reading, changing, or deleting a single Page instance.
+       Work with GET, PUT, PATCH, or DELETE methods.
     """
     queryset = Page.objects.all()
     serializer_class = PageSerializer

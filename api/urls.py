@@ -3,6 +3,6 @@ import api.views as api_views
 
 urlpatterns = [
     path('pages/', api_views.PageList.as_view(), name='wiki_list_or_create'),
-    path('pages/<int:pk>', api_views.PageDetail.as_view(),
-         name='wiki_read_or_delete'),
+    path('pages/<int:pk>/', api_views.PageOperationsView.as_view(),
+         name='wiki_read_change_or_delete'),
 ]
