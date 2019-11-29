@@ -2,6 +2,7 @@ from django.urls import path
 import api.views as api_views
 
 urlpatterns = [
-    path('pages/', api_views.PageList.as_view(), name='wiki_list'),
-
+    path('pages/', api_views.PageList.as_view(), name='wiki_list_or_create'),
+    path('pages/<int:pk>', api_views.PageDetail.as_view(),
+         name='wiki_read_or_delete'),
 ]
