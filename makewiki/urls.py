@@ -20,6 +20,9 @@ urlpatterns = [
     # Admin Site
     path('admin/', admin.site.urls),
 
+    # API Site
+    path('api/', include('api.urls'))
+
     # Wiki App
     path('', include('wiki.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
