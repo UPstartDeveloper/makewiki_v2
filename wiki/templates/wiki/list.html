@@ -8,12 +8,11 @@
       {% for page in pages %}
         {% include "partials/card.html" %}
       {% endfor %}
+      <!-- static image -->
+      {% load static %}
+      <img src="{% static 'sunset.jpg' %}" alt="" height=250px width=250px>
     </div>
   {% else %}
     <div class="alert alert-primary" role="alert">No pages to display.</div>
   {% endif %}
 {% endblock %}
-
-
-
-
