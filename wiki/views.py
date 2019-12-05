@@ -55,5 +55,6 @@ class PageCreate(CreateView):
 class PageUpdate(UpdateView):
     '''Render a form to update a page.'''
     model = Page
-    fields = ['title', 'content']
+    # fields = ['title', 'content']
+    form_class = PageForm
     template_name_suffix = "_edit_form"
