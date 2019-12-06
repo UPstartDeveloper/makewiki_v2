@@ -43,7 +43,6 @@ class PageCreate(CreateView):
     '''Render a form to create a new page.'''
     model = Page
     fields = ["title", "content"]
-    # object = None  # new Page to be created
     template_name = 'wiki/add_page.html'
 
     def form_valid(self, form, *args, **kwargs):
