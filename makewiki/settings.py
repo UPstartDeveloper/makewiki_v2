@@ -30,7 +30,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
-    'makewiki-v2-zr.herokuapp.com'
+    'makewiki-v2-zr.herokuapp.com',
+    '127.0.0.1',
 ]
 
 
